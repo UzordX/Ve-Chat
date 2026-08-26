@@ -68,3 +68,45 @@ else:
             file_name="محادثة_Ve_Chat.txt",
             mime="text/plain"
         )
+            # أسطر إدارة المحادثات الجديدة
+    if "chats" not in st.session_state:
+        st.session_state.chats = {"محادثة رئيسية": []}
+    if "current_chat" not in st.session_state:
+        st.session_state.current_chat = "محادثة رئيسية"
+
+    new_chat_title = st.sidebar.text_input("اسم محادثة جديدة:")
+    if st.sidebar.button("➕ إنشاء محادثة جديدة"):
+        if new_chat_title and new_chat_title not in st.session_state.chats:
+            st.session_state.chats[new_chat_title] = []
+            st.session_state.current_chat = new_chat_title
+            st.rerun()
+
+    chat_names_list = list(st.session_state.chats.keys())
+    selected_chat = st.sidebar.selectbox("📚 اختر المحادثة:", chat_names_list, index=chat_names_list.index(st.session_state.current_chat))
+    if selected_chat != st.session_state.current_chat:
+        st.session_state.current_chat = selected_chat
+        st.rerun()
+
+    # أسطر زر حفظ المحادثة الحالية
+    if st.session_state.chats[st.session_state.current_chat]:
+        chat_text = f"--- سجل محادثة: {st.session_state.current_chat} ---\n\n"
+        for msg in st.session_state.chats[st.session_state.current_chat]:
+            role = "المستخدم" if msg["role"] == "user" else "Ve-Chat"
+            chat_text += f"[{role}]:\n{msg['content']}\n\n" + "-"*40 + "\n\n"
+        
+        st.sidebar.markdown("---")
+        st.sidebar.download_button(
+            label="💾 تحميل المحادثة الحالية",
+            data=chat_text,
+            file_name=f"{st.session_state.current_chat}.txt",
+            mime="text/plain"
+        )
+st.markdown("""
+    <style>
+    .stApp { background-color: #0e1117; color: #ffffff; }
+    [data-testid="stSidebar"] { background-color: #161b22; }
+    header {visibility: hidden;}
+    footer {visibility: hidden;}
+    .block-container { padding-top: 2rem; padding-bottom: 2rem; }
+    </style>
+""", unsafe_allow_html=True)
