@@ -55,7 +55,7 @@ elif user_password:
 else:
     st.info("👈 يرجى إدخال كلمة السر في القائمة الجانبية للبدء.")
         # === كود حفظ المحادثة المضاف ===
-    if st.session_state.messages:
+if "messages" in st.session_state and st.session_state.messages:
         chat_text = "--- سجل محادثة Ve-Chat ---\n\n"
         for msg in st.session_state.messages:
             role = "المستخدم" if msg["role"] == "user" else "Ve-Chat"
