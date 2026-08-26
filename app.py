@@ -1,4 +1,4 @@
-import streamlit as st
+خimport streamlit as st
 import google.generativeai as genai
 
 # إعدادات الواجهة
@@ -54,3 +54,17 @@ elif user_password:
     st.sidebar.error("كلمة السر غير صحيحة!")
 else:
     st.info("👈 يرجى إدخال كلمة السر في القائمة الجانبية للبدء.")
+        # === كود حفظ المحادثة المضاف ===
+    if st.session_state.messages:
+        chat_text = "--- سجل محادثة Ve-Chat ---\n\n"
+        for msg in st.session_state.messages:
+            role = "المستخدم" if msg["role"] == "user" else "Ve-Chat"
+            chat_text += f"[{role}]:\n{msg['content']}\n\n" + "-"*40 + "\n\n"
+        
+        st.sidebar.markdown("---")
+        st.sidebar.download_button(
+            label="💾 حفظ المحادثة (تنزيل ملف)",
+            data=chat_text,
+            file_name="محادثة_Ve_Chat.txt",
+            mime="text/plain"
+        )
