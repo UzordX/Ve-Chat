@@ -1,4 +1,4 @@
-خimport streamlit as st
+import streamlit as st
 import google.generativeai as genai
 
 # إعدادات الواجهة
