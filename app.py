@@ -68,7 +68,26 @@ else:
             file_name="محادثة_Ve_Chat.txt",
             mime="text/plain"
         )
-            # أسطر إدارة المحادثات الجديدة
+        st.markdown("""
+    <style>
+    .stApp { background-color: #0e1117; color: #ffffff; }
+    [data-testid="stSidebar"] { background-color: #161b22; color: #ffffff; }
+    header {visibility: hidden;}
+    footer {visibility: hidden;}
+    .block-container { padding-top: 2rem; padding-bottom: 2rem; }
+    [data-testid="stChatInput"] {
+        border-color: #1f6feb !important;
+        background-color: #161b22 !important;
+    }
+    [data-testid="stChatInput"] textarea { color: #ffffff !important; }
+    [data-testid="stChatInput"] button {
+        background-color: #1f6feb !important;
+        color: #ffffff !important;
+    }
+    [data-testid="stChatInput"] button svg { fill: #ffffff !important; }
+    </style>
+""", unsafe_allow_html=True)
+    # أسطر المحادثات الجديدة المضافة
     if "chats" not in st.session_state:
         st.session_state.chats = {"محادثة رئيسية": []}
     if "current_chat" not in st.session_state:
@@ -87,7 +106,7 @@ else:
         st.session_state.current_chat = selected_chat
         st.rerun()
 
-    # أسطر زر حفظ المحادثة الحالية
+    # أسطر زر تحميل وحفظ المحادثة
     if st.session_state.chats[st.session_state.current_chat]:
         chat_text = f"--- سجل محادثة: {st.session_state.current_chat} ---\n\n"
         for msg in st.session_state.chats[st.session_state.current_chat]:
@@ -101,12 +120,3 @@ else:
             file_name=f"{st.session_state.current_chat}.txt",
             mime="text/plain"
         )
-st.markdown("""
-    <style>
-    .stApp { background-color: #0e1117; color: #ffffff; }
-    [data-testid="stSidebar"] { background-color: #161b22; }
-    header {visibility: hidden;}
-    footer {visibility: hidden;}
-    .block-container { padding-top: 2rem; padding-bottom: 2rem; }
-    </style>
-""", unsafe_allow_html=True)
