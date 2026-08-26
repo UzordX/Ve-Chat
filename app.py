@@ -1,25 +1,30 @@
 import streamlit as st
 import google.generativeai as genai
 
-# إعدادات الواجهة والألوان
-st.set_page_config(page_title="Ve-Chat", page_icon="🤖", layout="centered")
+# إعدادات الواجهة
+st.set_page_config(page_title="Ve-Chat", page_icon="🤖", layout="wide")
 
+# تحسين مظهر الواجهة بالكامل
 st.markdown("""
     <style>
-    .stApp { background-color: #131314; color: #e3e3e3; }
+    .stApp { background-color: #0e1117; color: #ffffff; }
+    header {visibility: hidden;}
+    footer {visibility: hidden;}
     </style>
 """, unsafe_allow_html=True)
 
 st.title("🤖 Ve-Chat")
 
-# جلب المفتاح المخبأ وكلمة السر بأمان من السيرفر
-api_key = st.secrets["GEMINI_API_KEY"]
-correct_password = st.secrets["MY_PASSWORD"]
+# جلب البيانات من Secrets
+api_key = st.secrets.get("GEMINI_API_KEY", "")
+correct_password = st.secrets.get("MY_PASSWORD", "")
 
 genai.configure(api_key=api_key)
-model = genai.GenerativeModel('gemini-1.5-flash')
 
-# القائمة الجانبية لإدخال كلمة المرور
+# استخدام الموديل المستقر الحديث
+model = genai.GenerativeModel('gemini-2.5-flash')
+
+# القائمة الجانبية
 user_password = st.sidebar.text_input("أدخل كلمة السر للدخول:", type="password")
 
 if user_password == correct_password:
@@ -38,10 +43,12 @@ if user_password == correct_password:
             st.markdown(prompt)
             
         with st.chat_message("assistant"):
-            response = model.generate_content(prompt)
-            st.markdown(response.text)
-            
-        st.session_state.messages.append({"role": "assistant", "content": response.text})
+            try:
+                response = model.generate_content(prompt)
+                st.markdown(response.text)
+                st.session_state.messages.append({"role": "assistant", "content": response.text})
+            except Exception as e:
+                st.error(f"حدث خطأ في الاتصال: {e}")
 
 elif user_password:
     st.sidebar.error("كلمة السر غير صحيحة!")
