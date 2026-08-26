@@ -22,7 +22,7 @@ correct_password = st.secrets.get("MY_PASSWORD", "")
 genai.configure(api_key=api_key)
 
 # استخدام الموديل المستقر الحديث
-model = genai.GenerativeModel('gemini-2.5-flash')
+model = genai.GenerativeModel('gemini-3.6-flash')
 
 # القائمة الجانبية
 user_password = st.sidebar.text_input("أدخل كلمة السر للدخول:", type="password")
